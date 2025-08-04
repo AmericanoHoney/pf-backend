@@ -1,4 +1,4 @@
-name: preflight # You can also change this to another name to avoid warning with existing group.
+name: mytodo # You can also change this to another name to avoid warning with existing group.
 services:
   backend:
     container_name: pf-backend
@@ -16,12 +16,8 @@ services:
     volumes:
       - ./logs:/app/logs
     post_start:
-      - command:
-          [
-            "sh",
-            "-c",
-            'npm run db:migrate | awk ''{ print strftime("[%Y-%m-%d %H:%M:%S]"), $0; fflush(); }'' | tee -a /app/logs/migration.log',
-          ]
+      - command: [ "sh", "-c", 'npm run db:migrate | awk ''{ print strftime("[%Y-%m-%d %H:%M:%S]"), $0; fflush(); }'' | tee -a /app/logs/migration.log' ]
 networks:
-  preflight_pf-net: # Check by using `docker network ls` command
+  preflight_pf-net:
+    # Check by using `docker network ls` command
     external: true

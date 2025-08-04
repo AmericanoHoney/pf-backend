@@ -34,6 +34,15 @@ app.get("/todo", async (req, res, next) => {
     next(err);
   }
 });
+//get owner
+app.get("/todo/owner", (req, res) => {
+  res.json({
+    id: "660610757",
+    name: "Natrada Nuchit",
+    course_id: "269497",
+    section: "001",
+  });
+});
 
 // Insert
 app.put("/todo", async (req, res, next) => {
