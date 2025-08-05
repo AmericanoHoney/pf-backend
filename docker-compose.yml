@@ -1,23 +1,48 @@
-name: mytodo # You can also change this to another name to avoid warning with existing group.
+version: "3.8"
+
 services:
-  backend:
-    container_name: pf-backend
-    build: .
+  mysql:
+    image: mysql:8.0
+    container_name: pf-mysql
+    restart: no
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DB}
+      MYSQL_USER: ${MYSQL_APP_USER}
+      MYSQL_PASSWORD: ${MYSQL_APP_PASSWORD}
+      MYSQL_ROOT_PASSWORD: rootpass
     ports:
-      - ${PORT}:3000
+      - "${MYSQL_PORT}:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
     networks:
       - preflight_pf-net
+
+  backend:
+    container_name: pf-mysql-backend
+    build: .
+    ports:
+      - "${PORT}:3000"
+    depends_on:
+      - mysql
     environment:
-      - POSTGRES_DB=${POSTGRES_DB}
-      - POSTGRES_PORT=${POSTGRES_PORT}
-      - POSTGRES_HOST=${POSTGRES_HOST}
-      - POSTGRES_APP_USER=${POSTGRES_APP_USER}
-      - POSTGRES_APP_PASSWORD=${POSTGRES_APP_PASSWORD}
+      MYSQL_DB: ${MYSQL_DB}
+      MYSQL_PORT: 3306
+      MYSQL_HOST: ${MYSQL_HOST}
+      MYSQL_APP_USER: ${MYSQL_APP_USER}
+      MYSQL_APP_PASSWORD: ${MYSQL_APP_PASSWORD}
     volumes:
       - ./logs:/app/logs
-    post_start:
-      - command: [ "sh", "-c", 'npm run db:migrate | awk ''{ print strftime("[%Y-%m-%d %H:%M:%S]"), $0; fflush(); }'' | tee -a /app/logs/migration.log' ]
+    networks:
+      - preflight_pf-net
+    command: >
+      sh -c " npx wait-port mysql:3306 &&
+              npm run db:migrate &&
+              npm run start"
+
+volumes:
+  mysql_data:
+
+
 networks:
   preflight_pf-net:
-    # Check by using `docker network ls` command
     external: true

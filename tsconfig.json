@@ -10,7 +10,8 @@
       "@db/*": [
         "./db/*"
       ]
-    }
+    },
+    "esModuleInterop": true
   },
   "include": [
     "./*",

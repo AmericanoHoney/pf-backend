@@ -1,8 +1,8 @@
 {
   "version": "5",
   "dialect": "mysql",
-  "id": "4003040f-f3fe-4160-adc6-b47fc717b1e8",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "a4cce05c-f34e-48a2-9a3e-641147bde3b3",
+  "prevId": "ba3c5c89-42da-46bc-82c9-d4caf8111859",
   "tables": {
     "mytodo_natrada": {
       "name": "mytodo_natrada",

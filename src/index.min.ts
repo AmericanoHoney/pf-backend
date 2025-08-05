@@ -6,9 +6,9 @@ import { dbClient } from "@db/client.js";
 const app = express();
 
 // Query
-app.get("/todo", async (req, res, next) => {
+app.get("/stock", async (req, res, next) => {
   try {
-    const results = await dbClient.query.todoTable.findMany();
+    const results = await dbClient.query.stockTable.findMany();
     res.json(results);
   } catch (err) {
     next(err);
